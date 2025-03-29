@@ -376,3 +376,44 @@ dbt run
 ```
 
 They can also be viewed in the documentation as part of your DAG and text-based documentation.
+
+## Advance Jinja and Macro
+
+### Grant Permissions Macro  
+
+Macros allow us to run queries against the database. Dave’s example demonstrates how to use a macro to execute multiple permission statements in a parameterized way, leveraging the following dbt-specific Jinja functions:
+
+- **run_query**  
+  Runs queries and fetches results. It wraps around the statement block, providing a convenient interface.
+  
+- **log**  
+  Logs messages to dbt logs. Using `default=True` also logs messages to the command line interface.
+  
+- **target**  
+  Stores connection details for the warehouse, including `profile_name`, `name`, `schema`, `type`, and `threads`.
+
+---
+
+### Union by Prefix Macro  
+
+This macro demonstrates how to use query results to template SQL in a model file. Dave’s example showcases the use of:
+
+- **execute**  
+  A boolean variable that is `true` during dbt execution, useful for conditional execution.
+  
+- **agate file types**  
+  The result of `run_query` is stored in an `agate` table, similar to a Pandas DataFrame in Python.
+  
+- **get_relations_by_prefix**  
+  Available via `dbt_utils`, this macro retrieves relations with a specified prefix.
+
+---
+
+### Clean Stale Models Macro  
+
+Dave illustrates how to clean up stale models in his development schema using:
+
+- The **information schema** in Snowflake (replicable on other platforms)
+- A macro that identifies models not modified in the past 7 days
+
+For more details, read the Discourse post on cleaning old and deprecated models.
