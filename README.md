@@ -136,3 +136,243 @@ Incremental models require more advanced configuration. Consult the [dbt documen
 **Configuration:**  
 Snapshots require more advanced configuration. Consult the [dbt documentation](https://docs.getdbt.com/docs/build/snapshots) for guidance on writing your first snapshot.  
 
+# Jinja
+
+## Overview
+
+Jinja is a templating language written in the Python programming language. Jinja is used in dbt to write functional SQL. For example, we can write a dynamic pivot model using Jinja.
+
+## Jinja Basics
+
+The best place to learn about leveraging Jinja is the [Jinja Template Designer documentation](https://jinja.palletsprojects.com/).
+
+There are three Jinja delimiters to be aware of in Jinja:
+
+- `{% … %}` is used for statements. These perform any function programming such as setting a variable or starting a for loop.
+- `{{ … }}` is used for expressions. These will print text to the rendered file. In most cases in dbt, this will compile your Jinja to pure SQL.
+- `{# … #}` is used for comments. This allows us to document our code inline. This will not be rendered in the pure SQL that you create when you run `dbt compile` or `dbt run`.
+
+A few helpful features of Jinja include dictionaries, lists, if/else statements, for loops, and macros.
+
+### Dictionaries
+Dictionaries are data structures composed of key-value pairs.
+
+```jinja
+{% set person = {
+    'name': 'me',
+    'number': 3
+} %}
+
+{{ person.name }}
+```
+**Output:**
+```
+me
+```
+```jinja
+{{ person['number'] }}
+```
+**Output:**
+```
+3
+```
+
+### Lists
+Lists are data structures that are ordered and indexed by integers.
+
+```jinja
+{% set self = ['me', 'myself'] %}
+
+{{ self[0] }}
+```
+**Output:**
+```
+me
+```
+
+### If/Else Statements
+If/else statements are control statements that make it possible to provide instructions for a computer to make decisions based on clear criteria.
+
+```jinja
+{% set temperature = 80.0 %}
+
+On a day like this, I especially like
+
+{% if temperature > 70.0 %}
+
+a refreshing mango sorbet.
+
+{% else %}
+
+A decadent chocolate ice cream.
+
+{% endif %}
+```
+**Output:**
+```
+On a day like this, I especially like
+
+a refreshing mango sorbet
+```
+
+### For Loops
+For loops make it possible to repeat a code block while passing different values for each iteration through the loop.
+
+```jinja
+{% set flavors = ['chocolate', 'vanilla', 'strawberry'] %}
+
+{% for flavor in flavors %}
+
+Today I want {{ flavor }} ice cream!
+
+{% endfor %}
+```
+**Output:**
+```
+Today I want chocolate ice cream!
+
+Today I want vanilla ice cream!
+
+Today I want strawberry ice cream!
+```
+
+### Macros
+Macros are a way of writing functions in Jinja. This allows us to write a set of statements once and then reference those statements throughout your codebase.
+
+```jinja
+{% macro hoyquiero(flavor, dessert = 'ice cream') %}
+
+Today I want {{ flavor }} {{ dessert }}!
+
+{% endmacro %}
+
+{{ hoyquiero(flavor = 'chocolate') }}
+```
+**Output:**
+```
+Today I want chocolate ice cream!
+```
+```jinja
+{{ hoyquiero('mango', 'sorbet') }}
+```
+**Output:**
+```
+Today I want mango sorbet!
+```
+
+## Whitespace Control
+We can control for whitespace by adding a single dash on either side of the Jinja delimiter. This will trim the whitespace between the Jinja delimiter on that side of the expression.
+
+
+## Intermediate Macro Macros
+
+Macros are functions that are written in Jinja. This allows us to write generic logic once, and then reference that logic throughout our project.  
+
+Consider the case where we have three models that use the same logic. We could copy-paste the logic between those three models. If we want to change that logic, we need to make the change in three different places.  
+
+Macros allow us to write that logic once in one place and then reference that logic in those three models. If we want to change the logic, we make that change in the definition of the macro, and this is automatically used in those three models.  
+
+### DRY Code  
+Macros allow us to write DRY (Don’t Repeat Yourself) code in our dbt project. This allows us to take one model file that was 200 lines of code and compress it down to 50 lines of code. We can do this by abstracting away the logic into macros.  
+
+### Tradeoff  
+As you work through your dbt project, it is important to balance the readability/maintainability of your code with how concise (or DRY) your code is. Always remember that you are not the only one using this code, so be mindful and intentional about where you use macros.  
+
+---
+
+## Macro Example: Cents to Dollars  
+
+### Original Model:  
+```sql
+select
+    id as payment_id,
+    orderid as order_id,
+    paymentmethod as payment_method,
+    status,
+    -- amount stored in cents, convert to dollars
+    amount / 100 as amount,
+    created as created_at
+from {{ source('stripe', 'payment') }}
+```
+
+### New Macro:  
+```jinja
+{% macro cents_to_dollars(column_name, decimal_places=2) -%}
+round( 1.0 * {{ column_name }} / 100, {{ decimal_places }})
+{%- endmacro %}
+```
+
+### Refactored Model:  
+```sql
+select
+    id as payment_id,
+    orderid as order_id,
+    paymentmethod as payment_method,
+    status,
+    -- amount stored in cents, convert to dollars
+    {{ cents_to_dollars('payment_amount') }} as amount,
+    created as created_at
+from {{ source('stripe', 'payment') }}
+```
+
+
+## Packages
+
+Packages are a tool for importing models and macros into your dbt project. These may have been written by a coworker or someone else in the dbt community that you have never met. Fishtown Analytics maintains a site called [hub.getdbt.com](https://hub.getdbt.com) for sharing open-source packages that you can install in your project. Packages can also be imported directly from GitHub, GitLab, another site, or from a subfolder in your dbt project.
+
+## Installing Packages
+
+Packages are configured in the root of your dbt project in a file called `packages.yml`.  
+You can adjust the version to be compatible with your working version of dbt. Read the package documentation to determine the appropriate version.  
+
+Packages are then installed with the command:
+
+```sh
+dbt deps
+```
+
+**Example:** Adding `dbt_utils` and `snowflake_spend` to your dbt project
+
+**packages.yml**
+```yaml
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 0.7.1
+  - package: gitlabhq/snowflake_spend
+    version: 1.2.0
+```
+
+After defining your packages, install them by running:
+
+```sh
+dbt deps
+```
+
+## Using Macros from a Package
+
+After importing a package, your dbt project has access to all macros from that package.  
+The documentation of the specific package is the best place to learn how to use its macros.  
+
+When referencing a macro from a package, you must specify the package name followed by the macro name.  
+For example, referencing the `dbt_utils` package and using the `date_spine` macro:
+
+```jinja
+{{ dbt_utils.date_spine(
+    datepart="day",
+    start_date="to_date('01/01/2016', 'mm/dd/yyyy')",
+    end_date="dateadd(week, 1, current_date)"
+) }}
+```
+
+## Using Models from a Package
+
+After importing a package, your dbt project has access to all models from that package.  
+The documentation of the specific package is the best place to learn how to use its models.  
+
+Those models become part of your dbt project and will be built when you run:
+
+```sh
+dbt run
+```
+
+They can also be viewed in the documentation as part of your DAG and text-based documentation.
