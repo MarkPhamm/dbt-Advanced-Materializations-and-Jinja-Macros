@@ -1,0 +1,68 @@
+[0m23:54:29.537181 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000015E601F21E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000015E5EF335C0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000015E5EF32390>]}
+
+
+============================== 23:54:29.568773 | 2e8b870a-eda5-4afd-9c4f-32572f9b2b7f ==============================
+[0m23:54:29.568773 [info ] [MainThread]: Running with dbt=1.9.3
+[0m23:54:29.570772 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'fail_fast': 'False', 'log_path': 'logs', 'version_check': 'True', 'profiles_dir': 'C:\\Users\\hamin\\.dbt', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt init', 'introspect': 'True', 'log_format': 'default', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m23:54:48.943118 [debug] [MainThread]: Starter project path: C:\Users\hamin\Desktop\dbt-Advanced-Materializations\.venv\Lib\site-packages\dbt\include\starter_project
+[0m23:54:49.004865 [info ] [MainThread]: 
+Your new dbt project "jinja" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m23:54:49.006864 [info ] [MainThread]: Setting up your profile.
+[0m23:56:50.870938 [info ] [MainThread]: Profile jinja written to C:\Users\hamin\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m23:56:50.873932 [debug] [MainThread]: Command `dbt init` succeeded at 23:56:50.872935 after 141.69 seconds
+[0m23:56:50.873932 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000015E602B4CE0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000015E5ED929C0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000015E607CB6B0>]}
+[0m23:56:50.874931 [debug] [MainThread]: Flushing usage events
+[0m23:56:51.279041 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m23:56:57.331623 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000027419C2A7E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002741D7C0D10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002741F02A5D0>]}
+
+
+============================== 23:56:57.340159 | f1634188-9d5d-4f59-b187-45838ca2678a ==============================
+[0m23:56:57.340159 [info ] [MainThread]: Running with dbt=1.9.3
+[0m23:56:57.342176 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': 'C:\\Users\\hamin\\.dbt', 'debug': 'False', 'fail_fast': 'False', 'log_path': 'logs', 'warn_error': 'None', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'log_format': 'default', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt debug', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m23:56:57.404219 [info ] [MainThread]: dbt version: 1.9.3
+[0m23:56:57.405217 [info ] [MainThread]: python version: 3.12.9
+[0m23:56:57.406319 [info ] [MainThread]: python path: C:\Users\hamin\Desktop\dbt-Advanced-Materializations\.venv\Scripts\python.exe
+[0m23:56:57.407484 [info ] [MainThread]: os info: Windows-11-10.0.26100-SP0
+[0m23:56:57.420764 [info ] [MainThread]: Error importing adapter: No module named 'dbt.adapters.postgres'
+[0m23:56:57.780544 [info ] [MainThread]: Using profiles dir at C:\Users\hamin\.dbt
+[0m23:56:57.781538 [info ] [MainThread]: Using profiles.yml file at C:\Users\hamin\.dbt\profiles.yml
+[0m23:56:57.782538 [info ] [MainThread]: Using dbt_project.yml file at C:\Users\hamin\Desktop\dbt-Advanced-Materializations\dbt\dbt_project.yml
+[0m23:56:57.782538 [info ] [MainThread]: Configuration:
+[0m23:56:57.783559 [info ] [MainThread]:   profiles.yml file [[31mERROR invalid[0m]
+[0m23:56:57.784074 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m23:56:57.784486 [info ] [MainThread]: Required dependencies:
+[0m23:56:57.784890 [debug] [MainThread]: Executing "git --help"
+[0m23:56:57.833215 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m23:56:57.834215 [debug] [MainThread]: STDERR: "b''"
+[0m23:56:57.835258 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m23:56:57.836214 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m23:56:57.836214 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m23:56:57.837213 [info ] [MainThread]: Could not load dbt_project.yml
+Profile loading failed for the following reason:
+Runtime Error
+  Credentials in profile "custom_postgres", target "dev" invalid: Runtime Error
+    Could not find adapter type postgres!
+
+
+[0m23:56:57.837213 [info ] [MainThread]: Project loading failed for the following reason:
+ project path <C:\Users\hamin\Desktop\dbt-Advanced-Materializations\dbt\dbt_project.yml> not found
+
+[0m23:56:57.839231 [debug] [MainThread]: Command `dbt debug` failed at 23:56:57.839231 after 0.96 seconds
+[0m23:56:57.839231 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002741F233560>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002741FBF2930>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002741AAD6000>]}
+[0m23:56:57.840230 [debug] [MainThread]: Flushing usage events
+[0m23:56:58.075129 [debug] [MainThread]: An error was encountered while trying to flush usage events
