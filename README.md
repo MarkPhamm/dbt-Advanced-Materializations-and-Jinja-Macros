@@ -136,7 +136,7 @@ Incremental models require more advanced configuration. Consult the [dbt documen
 **Configuration:**  
 Snapshots require more advanced configuration. Consult the [dbt documentation](https://docs.getdbt.com/docs/build/snapshots) for guidance on writing your first snapshot.  
 
-# Jinja
+# Jinja and Macros
 
 ## Overview
 
