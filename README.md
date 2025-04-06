@@ -1,8 +1,11 @@
 # dbt-Advanced-Materializations  
 
-## Tables  
-When using the ```table``` materialization, your model is rebuilt as a table on each run, via a ```create table``` as statement.
+## 1. Tables 
+**Definition:** Table is a physical object in a database that stores data in rows and columns.
 
+**Use Cases:** Use a ```table``` when you need to store data permanently, optimize query performance, support frequent inserts or updates, and take advantage of indexes and partitions for large datasets.
+
+When using the ```table``` materialization, your model is rebuilt as a table on each run, via a ```create table``` as statement.
 - Built as tables in the database  
 - Data is stored on disk  
 - Slower to build  
@@ -10,6 +13,7 @@ When using the ```table``` materialization, your model is rebuilt as a table on 
 
 **Pros:**  
 - Tables are fast to query
+- Tables support CRUD functions
 
 **Cons:**  
 - Tables can take a long time to rebuild, especially for complex transformations  
@@ -21,17 +25,20 @@ When using the ```table``` materialization, your model is rebuilt as a table on 
 
 **Configuration:**  
 Configure in `dbt_project.yml` or with the following config block:  
-```jinja
+
+```jinja 
 {{ config(
     materialized='table'
 ) }}
 ```
-
 ---
 
-## Views 
-When using the ```view``` materialization, your model is rebuilt as a view on each run, via a   ```create view as``` statement.
+## 2. Views 
+**Definition:**```view`` is a virtual table based on the result of a SQL query. It does not store data itself but shows data from one or more underlying tables at query time.
 
+**Use Cases:** Use a ```view``` when you want to simplify complex queries, enforce security by exposing only specific data, or ensure users always retrieve the most up-to-date information from underlying tables.
+
+When using the ```view``` materialization, your model is rebuilt as a view on each run, via a   ```create view as``` statement.
 - Built as views in the database  
 - Query is stored on disk  
 - Faster to build  
@@ -54,12 +61,41 @@ Configure in `dbt_project.yml` or with the following config block:
     materialized='view'
 ) }}
 ```
+---
+## 3. Materialized views
+**Definition:**```materialized view``` is a special type of view that stores the query result physically in the database, unlike a regular view that dynamically retrieves data every time it is queriedIt acts like a precomputed table that refreshes periodically, improving performance for complex queries.
 
+**Use Cases:** Use a ```materialized view``` when you need to boost performance for resource-intensive queries by storing precomputed results, especially in reporting or analytical scenarios where the underlying data changes less frequently.
+
+The `materialized_view` materialization allows the creation and maintenance of materialized views in the target database. Materialized views are a combination of a view and a table, and serve use cases similar to incremental models.
+
+**Pros:**  
+- Materialized views combine the query performance of a table with the data freshness of a view  
+- Materialized views operate much like incremental materializations, but they can usually be refreshed automatically on a regular cadence (depending on the database), without manual intervention—avoiding the regular dbt batch refresh required with incremental models  
+- `dbt run` on materialized views corresponds to a code deployment, just like views  
+
+**Cons:**  
+- Materialized views are more complex database objects, so database platforms tend to have fewer configuration options available; check your database platform's docs for more details  
+- Materialized views may not be supported by every database platform  
+
+**Advice:**  
+Consider materialized views for use cases where incremental models are sufficient, but you want the data platform to manage the incremental logic and refresh automatically.  
+
+**Configuration:**  
+Configure in `dbt_project.yml` or with the following config block:  
+```jinja
+{{ config(
+    materialized='materialized_view'
+) }}
+```
 ---
 
-## Ephemeral Models  
-```ephemeral``` models are not directly built into the database. Instead, dbt will interpolate the code from an ephemeral model into its dependent models using a common table expression (CTE). You can control the identifier for this CTE using a model alias, but dbt will always prefix the model identifier with ```__dbt__cte__```.
+## 4. Ephemeral Models  
+**Definition:** An ```ephemeral model``` is a type of model in dbt that does not exist as a physical object in the database. Instead, it is defined in the dbt project and is used to create common table expressions (CTEs) that are interpolated into downstream models during the build process.
 
+**Use Cases:** Use an ```ephemeral model``` when you need to perform lightweight transformations that are only relevant to one or two downstream models, or when you want to keep your data warehouse clean by avoiding the creation of unnecessary tables. They are particularly useful for reusable logic that does not require direct querying.
+
+```ephemeral``` models are not directly built into the database. Instead, dbt will interpolate the code from an ephemeral model into its dependent models using a common table expression (CTE). You can control the identifier for this CTE using a model alias, but dbt will always prefix the model identifier with ```__dbt__cte__```.
 - Does not exist in the database  
 - Imported as CTE into downstream models  
 - Increases build time of downstream models  
@@ -88,33 +124,13 @@ Configure in `dbt_project.yml` or with the following config block:
     materialized='ephemeral'
 ) }}
 ```
-
 ---
-## Materialized views
 
-The `materialized_view` materialization allows the creation and maintenance of materialized views in the target database. Materialized views are a combination of a view and a table, and serve use cases similar to incremental models.
+## 5. Incremental Models  
+**Definition:** An ```incremental model``` is a type of model in dbt that allows you to build a table in the database incrementally. This means that on the first run, the entire table is built, and on subsequent runs, only new records are appended. This approach improves performance by reducing the amount of data processed during each run.
 
-**Pros:**  
-- Materialized views combine the query performance of a table with the data freshness of a view  
-- Materialized views operate much like incremental materializations, but they can usually be refreshed automatically on a regular cadence (depending on the database), without manual intervention—avoiding the regular dbt batch refresh required with incremental models  
-- `dbt run` on materialized views corresponds to a code deployment, just like views  
+**Use Cases:** Use an ```incremental model``` when you have large datasets that are updated frequently, and you want to optimize the build process by only processing new or changed records. This is particularly useful in scenarios where the underlying data changes regularly, such as in ETL processes for reporting or analytics, allowing for faster refresh times and reduced resource consumption.
 
-**Cons:**  
-- Materialized views are more complex database objects, so database platforms tend to have fewer configuration options available; check your database platform's docs for more details  
-- Materialized views may not be supported by every database platform  
-
-**Advice:**  
-Consider materialized views for use cases where incremental models are sufficient, but you want the data platform to manage the incremental logic and refresh automatically.  
-
-**Configuration:**  
-Configure in `dbt_project.yml` or with the following config block:  
-```jinja
-{{ config(
-    materialized='materialized_view'
-) }}
-```
-
-## Incremental Models  
 - Built as a table in the database  
 - On the first run, builds the entire table  
 - On subsequent runs, only appends new records*  
@@ -126,7 +142,11 @@ Incremental models require more advanced configuration. Consult the [dbt documen
 
 ---
 
-## Snapshots  
+## 6. Snapshots  
+**Definition:** A ```snapshot``` in dbt is a mechanism for capturing the state of a table at a specific point in time. It allows you to track changes in your data over time by creating historical records. Each snapshot creates a new table in the database that includes the current state of the data along with metadata to identify changes.
+
+**Use Cases:** Use a ```snapshot``` when you need to maintain historical records of your data, such as tracking changes in customer information, product prices, or any other data that evolves over time. This is particularly useful for auditing, compliance, and reporting purposes, as it enables you to analyze how data has changed and to reconstruct past states of your data for analysis or reporting.
+
 - Built as a table in the database, usually in a dedicated schema  
 - On the first run, builds the entire table and adds four columns:  
   - `dbt_scd_id`, `dbt_updated_at`, `dbt_valid_from`, `dbt_valid_to`  
