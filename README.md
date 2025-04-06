@@ -90,6 +90,10 @@ Configure in `dbt_project.yml` or with the following config block:
 ```
 ---
 
+## View vs Table vs Materialized View
+<img src="https://github.com/user-attachments/assets/6d6bf727-06cf-4cb9-b961-3a8596922fa5" width="1200"/>
+
+---
 ## 4. Ephemeral Models  
 **Definition:** An ```ephemeral model``` is a type of model in dbt that does not exist as a physical object in the database. Instead, it is defined in the dbt project and is used to create common table expressions (CTEs) that are interpolated into downstream models during the build process.
 
